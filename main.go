@@ -26,7 +26,7 @@ func main() {
 	conn := connect()
 	defer conn.Close()
 
-	msg := buildStartUpMessage(PGUSER_KEY, PGUSER_VALUE)
+	msg := buildStartUpMessage()
 	conn.Write(msg)
 
 	r := bufio.NewReader(conn)
@@ -54,16 +54,27 @@ func connect() net.Conn {
 
 // buildStartUpMessage creates buffer
 // and fills it with user creds, protocol and message len
-func buildStartUpMessage(k, v string) []byte {
+func buildStartUpMessage() []byte {
+	// Encoding protocol into bytes representation
 	protocol := make([]uint8, 4)
 	binary.BigEndian.PutUint32(protocol, uint32(protocolV))
 
+	// encoding Paylong
 	msg := make([]uint8, 4)
 	msg = append(msg, protocol...)
 
-	msg = append(msg, []uint8("user\x00postgres\x00")...)
+	// Append to message PGUSER_KEY key-param
+	msg = append(msg, []uint8(PGUSER_KEY)...)
 	msg = append(msg, '\x00')
 
+	// Append to message value PGUSER_VALUE for key PGUSER_KWY
+	msg = append(msg, []uint8(PGUSER_VALUE)...)
+	msg = append(msg, '\x00')
+
+	// Append trailing terminating byte
+	msg = append(msg, '\x00')
+
+	// Encoding message len
 	binary.BigEndian.PutUint32(msg, uint32(len(msg)))
 	return msg
 }
