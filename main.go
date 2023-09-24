@@ -70,7 +70,7 @@ func buildStartUpMessage() []byte {
 	msg = append(msg, []uint8(PGUSER_KEY)...)
 	msg = append(msg, '\x00')
 
-	// Append to message value PGUSER_VALUE for key PGUSER_KWY
+	// Append to message value PGUSER_VALUE for key PGUSER_KEY
 	msg = append(msg, []uint8(PGUSER_VALUE)...)
 	msg = append(msg, '\x00')
 
