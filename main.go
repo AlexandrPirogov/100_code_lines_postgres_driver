@@ -59,8 +59,11 @@ func buildStartUpMessage() []byte {
 	protocol := make([]uint8, 4)
 	binary.BigEndian.PutUint32(protocol, uint32(protocolV))
 
-	// encoding Paylong
+	// Encoding Payload
+	// 4 bytes are allocated for message length
 	msg := make([]uint8, 4)
+
+	// Append encoded protocol
 	msg = append(msg, protocol...)
 
 	// Append to message PGUSER_KEY key-param
