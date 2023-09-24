@@ -85,14 +85,24 @@ func buildStartUpMessage() []byte {
 // buildQueryMessage creates buffer
 // and fills it with given query
 func buildQueryMessage(q string) []byte {
+	// Tag to tell Postgres that is query message
 	tag := 'Q'
 
-	meta := make([]byte, 4)
+	// Encoding Payload
+	// 4 bytes are allocated for message length
+	payloadLen := make([]byte, 4)
+
+	// Append query to payload
 	payload := []byte(q)
+
+	// Append trailing terminating byte
 	payload = append(payload, '\x00')
-	payload = append(meta, payload...)
+
+	// Set message length
+	payload = append(payloadLen, payload...)
 	binary.BigEndian.PutUint32(payload, uint32(len(payload)))
 
+	// Set tag
 	payload = append([]byte{byte(tag)}, payload...)
 	return payload
 }
