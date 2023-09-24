@@ -38,7 +38,7 @@ func main() {
 		query := sc.Text()
 		q := buildQueryMessage(query)
 		conn.Write(q)
-		queryResponse(r)
+		receive(r)
 		fmt.Printf("->")
 	}
 }
@@ -111,7 +111,8 @@ func buildQueryMessage(q string) []byte {
 func receive(r *bufio.Reader) {
 	tag, _ := r.ReadByte()
 	for tag != 90 {
-		readMsg(r)
+		msg := readMsg(r)
+		fmt.Printf("Tag: %s, %s\n", string(tag), string(msg))
 		tag, _ = r.ReadByte()
 	}
 	readMsg(r)
