@@ -115,6 +115,7 @@ func receive(r *bufio.Reader) {
 		fmt.Printf("Tag: %s, %s\n", string(tag), string(msg))
 		tag, _ = r.ReadByte()
 	}
+	fmt.Printf("Tag: %s. Postgres is ready for queries\n", string(tag))
 	readMsg(r)
 }
 
